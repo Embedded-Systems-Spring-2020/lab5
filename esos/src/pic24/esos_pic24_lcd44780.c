@@ -49,7 +49,7 @@
 #define LCD_RS (_RC12)
 
 /*** T H E   C O D E *************************************************/
-void __esos_lcd44780_pic24_config ( void )
+void __esos_lcd44780_pic24_config(void)
 {
     // Set up the hardware aspects of the HWxxx interface of the LCD module service
     //    direction, thresholds, etc beyond what is already done in esos_lcd44780_config()
@@ -146,7 +146,7 @@ uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 	return u8_data;
 }
 
-void __esos_lcd44780_pic24_configDataPinsAsInput( void ) {
+void __esos_lcd44780_pic24_configDataPinsAsInput(void) {
 	// write the hardware-specific code to set the LCD character module
 	// data pins to be "inputs" to prepare for a read of the LCD module
 
@@ -171,7 +171,7 @@ void __esos_lcd44780_pic24_configDataPinsAsInput( void ) {
 	
 }
 
-void __esos_lcd44780_pic24_configDataPinsAsOutput( void ) {
+void __esos_lcd44780_pic24_configDataPinsAsOutput(void) {
 	// write the hardware-specific code to set the LCD character module
 	// data pins to be "outputs" to prepare for a write to the LCD module
 	
