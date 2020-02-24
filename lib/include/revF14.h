@@ -72,40 +72,4 @@ void CONFIG_RPG()  {
 #define RPGA (_RB8)
 #define RPGB (_RB9)
 
-
-//************LCD**********
-void CONFIG_LCD() {
-  // connected to LCDD0 - LCDD7
-  CONFIG_RE0_AS_DIG_OUTPUT();
-  CONFIG_RE1_AS_DIG_OUTPUT();
-  CONFIG_RE2_AS_DIG_OUTPUT();
-  CONFIG_RE3_AS_DIG_OUTPUT();
-  CONFIG_RE4_AS_DIG_OUTPUT();
-  CONFIG_RE5_AS_DIG_OUTPUT();
-  CONFIG_RE6_AS_DIG_OUTPUT();
-  CONFIG_RE7_AS_DIG_OUTPUT();
-
-  // connected to LCDE
-  CONFIG_RD10_AS_DIG_OUTPUT();
-
-  // connected to LCDRW (0/L: Write, 1/H: Read)
-  CONFIG_RD11_AS_DIG_OUTPUT();
-
-  // connected to LCDRS 
-  CONFIG_RC12_AS_DIG_OUTPUT();
-}
-#define LCD_D0 (_RE0)
-#define LCD_D1 (_RE1)
-#define LCD_D2 (_RE2)
-#define LCD_D3 (_RE3)
-#define LCD_D4 (_RE4)
-#define LCD_D5 (_RE5)
-#define LCD_D6 (_RE6)
-#define LCD_D7 (_RE7)
-
-#define LCD_E (_RD10)
-#define LCD_RW (_RD11)
-#define LCD_RS (_RC12)
-
-
 #endif // closes the #ifndef block
