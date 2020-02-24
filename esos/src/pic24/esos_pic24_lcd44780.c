@@ -57,13 +57,49 @@ void __esos_lcd44780_pic24_config ( void )
 
 }
 
-void __esos_lcd44780_pic24_setDataPins( uint8_t u8_data) {
+void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 	// write the hardware-specific code to take the u8_data passed in
 	// and place it on the appropriate data pins
-	
+
+	// Assuming that the first bit of u8_data is the DB0 and the last bit of 
+	// u8_data is the DB7
+
+	uint8_t u8_data_working_copy = u8_data;
+	int lsb_value = 0;
+
+	for (int i = 0; i < 8; i++) {
+		lsb_value = u8_data & 0x01;
+		switch(i) {
+			case 0:
+				LCD_D0 = lsb_value;
+				break;
+			case 1:
+				LCD_D1 = lsb_value;
+				break;
+			case 2:
+				LCD_D2 = lsb_value;
+				break;
+			case 3:
+				LCD_D3 = lsb_value;
+				break;
+			case 4:
+				LCD_D4 = lsb_value;
+				break;
+			case 5:
+				LCD_D5 = lsb_value;
+				break;
+			case 6:
+				LCD_D6 = lsb_value;
+				break;		
+			case 7:
+				LCD_D7 = lsb_value;
+				break;
+		}
+		u8_data_working_copy = u8_data_working_copy >> 1;
+	}
 }
 
-uint8_t __esos_lcd44780_pic24_getDataPins( void ) {
+uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 	// write the hardware-specific code to read the appropriate data pins
 	// and create the uint8 data to return to the caller
 	
