@@ -35,6 +35,19 @@
 /*** I N C L U D E S *************************************************/
 #include "esos_pic24_lcd.h"
 
+#define LCD_D0 (_RE0)
+#define LCD_D1 (_RE1)
+#define LCD_D2 (_RE2)
+#define LCD_D3 (_RE3)
+#define LCD_D4 (_RE4)
+#define LCD_D5 (_RE5)
+#define LCD_D6 (_RE6)
+#define LCD_D7 (_RE7)
+
+#define LCD_E (_RD10)
+#define LCD_RW (_RD11)
+#define LCD_RS (_RC12)
+
 /*** T H E   C O D E *************************************************/
 void __esos_lcd44780_pic24_config ( void )
 {
@@ -59,6 +72,25 @@ uint8_t __esos_lcd44780_pic24_getDataPins( void ) {
 void __esos_lcd44780_pic24_configDataPinsAsInput( void ) {
 	// write the hardware-specific code to set the LCD character module
 	// data pins to be "inputs" to prepare for a read of the LCD module
+
+	// connected to LCDD0 - LCDD7
+	CONFIG_RE0_AS_DIG_INPUT();
+	CONFIG_RE1_AS_DIG_INPUT();
+	CONFIG_RE2_AS_DIG_INPUT();
+	CONFIG_RE3_AS_DIG_INPUT();
+	CONFIG_RE4_AS_DIG_INPUT();
+	CONFIG_RE5_AS_DIG_INPUT();
+	CONFIG_RE6_AS_DIG_INPUT();
+	CONFIG_RE7_AS_DIG_INPUT();
+
+	// connected to LCDE
+	CONFIG_RD10_AS_DIG_INPUT();
+
+	// connected to LCDRW (0/L: Write, 1/H: Read)
+	CONFIG_RD11_AS_DIG_INPUT();
+
+	// connected to LCDRS 
+	CONFIG_RC12_AS_DIG_INPUT();
 	
 }
 
@@ -66,4 +98,23 @@ void __esos_lcd44780_pic24_configDataPinsAsOutput( void ) {
 	// write the hardware-specific code to set the LCD character module
 	// data pins to be "outputs" to prepare for a write to the LCD module
 	
+  	// connected to LCDD0 - LCDD7
+	CONFIG_RE0_AS_DIG_OUTPUT();
+	CONFIG_RE1_AS_DIG_OUTPUT();
+	CONFIG_RE2_AS_DIG_OUTPUT();
+	CONFIG_RE3_AS_DIG_OUTPUT();
+	CONFIG_RE4_AS_DIG_OUTPUT();
+	CONFIG_RE5_AS_DIG_OUTPUT();
+	CONFIG_RE6_AS_DIG_OUTPUT();
+	CONFIG_RE7_AS_DIG_OUTPUT();
+
+	// connected to LCDE
+	CONFIG_RD10_AS_DIG_OUTPUT();
+
+	// connected to LCDRW (0/L: Write, 1/H: Read)
+	CONFIG_RD11_AS_DIG_OUTPUT();
+
+	// connected to LCDRS 
+	CONFIG_RC12_AS_DIG_OUTPUT();
+
 }
