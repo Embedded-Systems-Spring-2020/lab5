@@ -75,6 +75,7 @@ void CONFIG_RPG()  {
 
 //************LCD**********
 void CONFIG_LCD() {
+  // connected to LCDD0 - LCDD7
   CONFIG_RE0_AS_DIG_OUTPUT();
   CONFIG_RE1_AS_DIG_OUTPUT();
   CONFIG_RE2_AS_DIG_OUTPUT();
@@ -84,6 +85,15 @@ void CONFIG_LCD() {
   CONFIG_RE6_AS_DIG_OUTPUT();
   CONFIG_RE7_AS_DIG_OUTPUT();
 
+  // connected to LCDE
+  CONFIG_RD10_AS_DIG_OUTPUT();
+
+  // connected to LCDRW (0/L: Write, 1/H: Read)
+  CONFIG_RD11_AS_DIG_OUTPUT();
+
+  // connected to LCDRS 
+  CONFIG_RC12_AS_DIG_OUTPUT();
 }
+
 
 #endif // closes the #ifndef block
