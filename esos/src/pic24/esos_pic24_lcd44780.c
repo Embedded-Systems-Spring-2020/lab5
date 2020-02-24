@@ -102,7 +102,48 @@ void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 	// write the hardware-specific code to read the appropriate data pins
 	// and create the uint8 data to return to the caller
-	
+
+	uint8_t u8_data = 0x00;
+
+	for (int i = 0; i < 8; i++) {
+		switch(i) {
+			case 0:
+				u8_data = u8_data | LCD_D7;
+				break;
+
+			case 1:
+				u8_data = u8_data | LCD_D6;
+				break;
+
+			case 2:
+				u8_data = u8_data | LCD_D5;
+				break;
+
+			case 3:
+				u8_data = u8_data | LCD_D4;
+				break;
+
+			case 4:
+				u8_data = u8_data | LCD_D3;
+				break;
+
+			case 5:
+				u8_data = u8_data | LCD_D2;
+				break;
+
+			case 6:
+				u8_data = u8_data | LCD_D1;
+				break;
+
+			case 7:
+				u8_data = u8_data | LCD_D0;
+				break;
+		}
+
+		if (i != 7) u8_data = u8_data << 1;
+	}
+
+	return u8_data;
 }
 
 void __esos_lcd44780_pic24_configDataPinsAsInput( void ) {
