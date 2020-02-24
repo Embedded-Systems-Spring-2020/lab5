@@ -72,4 +72,18 @@ void CONFIG_RPG()  {
 #define RPGA (_RB8)
 #define RPGB (_RB9)
 
+
+//************LCD**********
+void CONFIG_LCD() {
+  CONFIG_RE0_AS_DIG_OUTPUT();
+  CONFIG_RE1_AS_DIG_OUTPUT();
+  CONFIG_RE2_AS_DIG_OUTPUT();
+  CONFIG_RE3_AS_DIG_OUTPUT();
+  CONFIG_RE4_AS_DIG_OUTPUT();
+  CONFIG_RE5_AS_DIG_OUTPUT();
+  CONFIG_RE6_AS_DIG_OUTPUT();
+  CONFIG_RE7_AS_DIG_OUTPUT();
+
+}
+
 #endif // closes the #ifndef block
