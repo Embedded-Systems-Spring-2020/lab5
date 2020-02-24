@@ -72,6 +72,25 @@ uint8_t __esos_lcd44780_pic24_getDataPins( void ) {
 void __esos_lcd44780_pic24_configDataPinsAsInput( void ) {
 	// write the hardware-specific code to set the LCD character module
 	// data pins to be "inputs" to prepare for a read of the LCD module
+
+	// connected to LCDD0 - LCDD7
+	CONFIG_RE0_AS_DIG_INPUT();
+	CONFIG_RE1_AS_DIG_INPUT();
+	CONFIG_RE2_AS_DIG_INPUT();
+	CONFIG_RE3_AS_DIG_INPUT();
+	CONFIG_RE4_AS_DIG_INPUT();
+	CONFIG_RE5_AS_DIG_INPUT();
+	CONFIG_RE6_AS_DIG_INPUT();
+	CONFIG_RE7_AS_DIG_INPUT();
+
+	// connected to LCDE
+	CONFIG_RD10_AS_DIG_INPUT();
+
+	// connected to LCDRW (0/L: Write, 1/H: Read)
+	CONFIG_RD11_AS_DIG_INPUT();
+
+	// connected to LCDRS 
+	CONFIG_RC12_AS_DIG_INPUT();
 	
 }
 
@@ -97,6 +116,5 @@ void __esos_lcd44780_pic24_configDataPinsAsOutput( void ) {
 
 	// connected to LCDRS 
 	CONFIG_RC12_AS_DIG_OUTPUT();
-	}
 
 }
