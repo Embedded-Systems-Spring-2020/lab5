@@ -94,6 +94,18 @@ void CONFIG_LCD() {
   // connected to LCDRS 
   CONFIG_RC12_AS_DIG_OUTPUT();
 }
+#define LCD_D0 (_RE0)
+#define LCD_D1 (_RE1)
+#define LCD_D2 (_RE2)
+#define LCD_D3 (_RE3)
+#define LCD_D4 (_RE4)
+#define LCD_D5 (_RE5)
+#define LCD_D6 (_RE6)
+#define LCD_D7 (_RE7)
+
+#define LCD_E (_RD10)
+#define LCD_RW (_RD11)
+#define LCD_RS (_RC12)
 
 
 #endif // closes the #ifndef block
