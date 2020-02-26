@@ -48,9 +48,21 @@ void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 	// write the hardware-specific code to take the u8_data passed in
 	// and place it on the appropriate data pins
 
+
+	//Suggestion: more compact way of settig pins from byte
+	//where the MSb is LCD_D7
+	// LCD_D7 = (u8_data >> 7) & 0x01;
+	// LCD_D6 = (u8_data >> 6) & 0x01;
+	// LCD_D5 = (u8_data >> 5) & 0x01;
+	// LCD_D4 = (u8_data >> 4) & 0x01;
+	// LCD_D3 = (u8_data >> 3) & 0x01;
+	// LCD_D2 = (u8_data >> 2) & 0x01;
+	// LCD_D1 = (u8_data >> 1) & 0x01;
+	// LCD_D0 = (u8_data >> 0) & 0x01;
+
+
 	// Assuming that the first bit of u8_data is the DB0 and the last bit of 
 	// u8_data is the DB7
-
 	uint8_t u8_data_working_copy = u8_data;
 	int lsb_value = 0;
 
@@ -89,6 +101,20 @@ void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 	// write the hardware-specific code to read the appropriate data pins
 	// and create the uint8 data to return to the caller
+
+	//Suggestion: more compact way of constructing return byte
+	//where the MSb is LCD_D7
+	// uint8_t u8_data = 0;
+
+	// u8_data |= LCD_D7 << 7;
+	// u8_data |= LCD_D6 << 6;
+	// u8_data |= LCD_D5 << 5;
+	// u8_data |= LCD_D4 << 4;
+	// u8_data |= LCD_D3 << 3;
+	// u8_data |= LCD_D2 << 2;
+	// u8_data |= LCD_D1 << 1;
+	// u8_data |= LCD_D0 << 0;
+
 
 	uint8_t u8_data = 0x00;
 
