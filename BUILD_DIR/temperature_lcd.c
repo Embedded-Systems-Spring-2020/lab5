@@ -13,15 +13,15 @@
 #include <stdlib.h>
 #include <string.h>
 /**********************************************************************/
-#define LCD_IS_READY ESOS_USER_FLAG_1
+#define LCD_IS_READY  ESOS_USER_FLAG_1
 esos_ClearUserFlag(LCD_IS_READY);
 ESOS_USER_TASK(initLCDtest) {
 	char ac_testString[] = "LCD test";
     ESOS_TASK_BEGIN();
-		while (esos_IsUserFlagClear){
+		while (esos_IsUserFlagClear(LCD_IS_READY)){
 			esos_lcd44780_init();
 			esos_lcd44780_configDisplay();
-			esos_lcd44780_writeString( 0, 0, ac_testString ); outputs test message to LCD top row, far left
+			esos_lcd44780_writeString( 0, 0, ac_testString ); 
 			ESOS_TASK_WAIT_TICKS(1000);
 			esos_lcd44780_clearScreen();
 			esos_SetUserFlag(LCD_IS_READY);
@@ -29,7 +29,7 @@ ESOS_USER_TASK(initLCDtest) {
 	ESOS_TASK_END();
 }
 /*************************************************************************/
-ESOS_CHILD_TASK(th_pot_display_LCD, uint16_t u16_num2graph){  //visual display of data
+ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of data
 	uint8_t u8_slider_pos = 0;
 	char ac_pot_top_row[] = "pot 0x";  //need to write num2graph somehow
 	char ac_pot_bottom_row[] = "________";  //would rather use char D2
@@ -42,15 +42,16 @@ ESOS_CHILD_TASK(th_pot_display_LCD, uint16_t u16_num2graph){  //visual display o
 	ESOS_TASK_END();
 }
 /**************************************************************************/
-ESOS_CHILD_TASK(th_pot_display_LCD, uint16_t u16_num2graph){  //visual display of data
-	
+ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of data
+	uint64_t u64_temp_data; //need 64 bit to handle big number calc tho result will be small
 	char ac_pot_top_row[] = "LM60";  
 	char ac_pot_bottom_row[] = "C";  
-	char ac_slider[] = "|";
 	ESOS_TASK_BEGIN();
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 2, ac_pot_bottom_row);
-		//need conversion to C and diplay on LCD
+		u64_temp_data = (uint64_t)(((300000 * u16_num2graph/4096) - 42400) / 625);
+		esos_lcd44780_writeChar( 1, 0, (char)(u64_temp_data / 16));
+		esos_lcd44780_writeChar( 1, 1, (char)(u64_temp_data - (u64_temp_data / 16)));
 	ESOS_TASK_END();
 }
 /****************************************************************************/
@@ -58,26 +59,26 @@ ESOS_CHILD_TASK(th_pot_display_LCD, uint16_t u16_num2graph){  //visual display o
 ESOS_USER_TASK(loop) {
 	static uint16_t u16_data;
 	static ESOS_TASK_HANDLE th_pot_display_LCD;
+	static ESOS_TASK_HANDLE th_temp_display_LCD;
 	ESOS_TASK_BEGIN();
 		while (esos_IsUserFlagSet(LCD_IS_READY)){
 			if (esos_IsUserFlagClear(DISPLAY_TEMP)){
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH02, ESOS_SENSOR_VREF_3V3);	
 				ESOS_TASK_WAIT_SENSOR_QUICK_READ(u16_data);
 				ESOS_ALLOCATE_CHILD_TASK(th_pot_display_LCD);
-				ESOS_TASK_SPAWN_AND_WAIT(th_pot_display_LCD, u16_data);
-			
+				ESOS_TASK_SPAWN_AND_WAIT(th_pot_display_LCD, pot_display_LCD, u16_data);			
 			}else {
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH03, ESOS_SENSOR_VREF_3V0);	
 				ESOS_TASK_WAIT_SENSOR_QUICK_READ(u16_data);
 				ESOS_ALLOCATE_CHILD_TASK(th_temp_display_LCD);
-				ESOS_TASK_SPAWN_AND_WAIT(th_temp_display_LCD, u16_data);
+				ESOS_TASK_SPAWN_AND_WAIT(th_temp_display_LCD, temp_display_LCD, u16_data);
 			}
 			if (esos_uiF14_isSW3Pressed()){  //SW3 toggles display between pot and temp
-				ESOS_TASK_WAIT_UNTIL_UIF14_SW3_RELEASED();
-				if (esos_IsUserFlagClear(DISPLAY_TEMP){
+				ESOS_TASK_WAIT_UNTIL(esos_uiF14_isSW3Released());
+				if (esos_IsUserFlagClear(DISPLAY_TEMP)){
 					esos_SetUserFlag(DISPLAY_TEMP);
 				}
-				else if (esos_IsUserFlagSet(DISPLAY_TEMP){
+				else if (esos_IsUserFlagSet(DISPLAY_TEMP)){
 					esos_ClearUserFlag(DISPLAY_TEMP);
 				}
 			}	
