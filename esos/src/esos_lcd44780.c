@@ -258,7 +258,7 @@ void esos_lcd44780_setCursorDisplay( BOOL u8_state )
     // Set cursor display state to u8_state
 	// TODO:  Write hardware-independent code here
 
-	esos_lcd44780_vars.b_cursorBlink = u8_state;
+	esos_lcd44780_vars.b_cursor_Shown = u8_state;
 }
 
 BOOL esos_lcd44780_getCursorDisplay( void )
@@ -304,7 +304,7 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
     // Set custom character memory for u8_charSlot to data in pu8_charData
 	// TODO:  Write hardware-independent code here
 	
-    // pu8_charData=u8_charSlot;
+    // pu8_charData=&u8_charSlot;
 		
 }
 
