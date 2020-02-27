@@ -216,6 +216,7 @@ void esos_lcd44780_setCursor( uint8_t u8_row, uint8_t u8_column )
 {
     // Move cursor to (u8_row,u8_column) without changing memory buffer or the display
 	// TODO:  Write hardware-independent code here
+	
 }
 
 void esos_lcd44780_writeChar( uint8_t u8_row, uint8_t u8_column, uint8_t u8_data )
@@ -233,6 +234,7 @@ void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_
 {
     // Write u8_bufflen characters from pu8_data to (u8_row,u8_column)
 	// TODO:  Write hardware-independent code here
+
 }
 
 void esos_lcd44780_getBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_data, uint8_t u8_bufflen )
@@ -251,48 +253,64 @@ void esos_lcd44780_setCursorDisplay( BOOL u8_state )
 {
     // Set cursor display state to u8_state
 	// TODO:  Write hardware-independent code here
+
+	b_cursorBlink = u8_state;
 }
 
 BOOL esos_lcd44780_getCursorDisplay( void )
 {
     // Return cursor display state
 	// TODO:  Write hardware-independent code here
+
+	return b_cursor_Shown;
 }
 
 void esos_lcd44780_setCursorBlink( BOOL u8_state )
 {
     // Set cursor blink state to u8_state
 	// TODO:  Write hardware-independent code here
+
+	b_cursor_Blink = u8_state;
 }
 
 BOOL esos_lcd44780_getCursorBlink( void )
 {
     // Return cursor blink state
 	// TODO:  Write hardware-independent code here
+	
+	return b_cursor_Blink;
 }
 
 void esos_lcd44780_setDisplayVisible( BOOL u8_state )
 {
     // Set display visible state to u8_state
 	// TODO:  Write hardware-independent code here
+	b_displayVisible = u8_state;
 }
 
 BOOL esos_lcd44780_getDisplayVisible( void )
 {
     // Return display visible state
 	// TODO:  Write hardware-independent code here
+	return b_displayVisible;
 }
 
 void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
     // Set custom character memory for u8_charSlot to data in pu8_charData
 	// TODO:  Write hardware-independent code here
+	
+     pu8_charData=u8_charSlot;
+		
+
 }
 
 void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
     // Return pu8_charData with custom character memory for u8_charSlot
 	// TODO:  Write hardware-independent code here
+
+	return pu8_charData;
 }
 
 BOOL esos_lcd44780_isCurrent( void )
