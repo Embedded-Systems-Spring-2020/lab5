@@ -42,6 +42,7 @@
 
 /* I N C L U D E S **********************************************************/
 //#include <esos_lcd.h>
+#include <pic24_all.h>
 #include <pic24_ports_config.h>
 
 
@@ -56,7 +57,7 @@
 #define LCD_D7 (_RE7)
 
 #define LCD_E (_RD10)
-#define LCD_RW _RD11
+#define LCD_RW (_RD11)
 #define LCD_RS (_RC12)
 
 /* HW-SPECIFIC MACROS *******************************************************/
