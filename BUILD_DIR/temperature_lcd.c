@@ -12,11 +12,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <esos_lcd44780.h>
 /**********************************************************************/
 
 
 #define LCD_IS_READY  ESOS_USER_FLAG_1
-esos_ClearUserFlag(LCD_IS_READY);
+//esos_ClearUserFlag(LCD_IS_READY);
 ESOS_USER_TASK(initLCDtest) {
 	char ac_testString[] = "LCD test";
     ESOS_TASK_BEGIN();
@@ -89,7 +91,7 @@ ESOS_USER_TASK(loop) {
 }
 
 void user_init(void){
-	esos_uif14_flashLED3(500);
+	esos_uiF14_flashLED3(500);
     config_esos_uiF14();
 	esos_RegisterTask(initLCDtest);
     esos_RegisterTask(loop);
