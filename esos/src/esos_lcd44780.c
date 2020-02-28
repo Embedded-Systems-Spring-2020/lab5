@@ -69,13 +69,13 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 
 
 	// TODO: remove the magic numbers in this section
-	ESOS_TASK_WAIT_TICKS(100);			// Wait >15 msec after power is applied
+	ESOS_TASK_WAIT_TICKS(15);			// Wait >15 msec after power is applied
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(10);			// must wait 5ms, busy flag not available
+	ESOS_TASK_WAIT_TICKS(5);			// must wait 5ms, busy flag not available
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(1);			// must wait 160us, busy flag not available
+	ESOS_TASK_WAIT_TICKS(1600);			// must wait 160us, busy flag not available
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(1);			// must wait 160us, busy flag not available
+	ESOS_TASK_WAIT_TICKS(1600);			// must wait 160us, busy flag not available
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x38);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x10);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x0C);
