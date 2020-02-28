@@ -41,7 +41,7 @@
  */
 
 /* I N C L U D E S **********************************************************/
-#include <esos_lcd.h>
+//#include <esos_lcd.h>
 
 //Pin Configs
 #define LCD_D0 (_RE0)
