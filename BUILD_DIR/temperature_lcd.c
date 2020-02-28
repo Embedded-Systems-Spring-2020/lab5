@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 /**********************************************************************/
+
+
 #define LCD_IS_READY  ESOS_USER_FLAG_1
 esos_ClearUserFlag(LCD_IS_READY);
 ESOS_USER_TASK(initLCDtest) {
@@ -50,8 +52,8 @@ ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of 
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 2, ac_pot_bottom_row);
 		u64_temp_data = (uint64_t)(((300000 * u16_num2graph/4096) - 42400) / 625);
-		esos_lcd44780_writeChar( 1, 0, (char)(u64_temp_data / 16));
-		esos_lcd44780_writeChar( 1, 1, (char)(u64_temp_data - (u64_temp_data / 16)));
+		esos_lcd44780_writeChar( 1, 0, (uint8_t)(u64_temp_data / 16));
+		esos_lcd44780_writeChar( 1, 1, (uint8_t)(u64_temp_data - (u64_temp_data / 16)));
 	ESOS_TASK_END();
 }
 /****************************************************************************/
