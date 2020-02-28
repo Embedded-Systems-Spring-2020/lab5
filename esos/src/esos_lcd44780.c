@@ -216,9 +216,8 @@ void esos_lcd44780_setCursor( uint8_t u8_row, uint8_t u8_column )
 {
     // Move cursor to (u8_row,u8_column) without changing memory buffer or the display
 	// TODO:  Write hardware-independent code here
-
-	esos_lcd44780_vars.u8_cursor_Row = u8_row;
-	esos_lcd44780_vars.u8_cursor_Col = u8_column;
+	esos_lcd44780_vars.u8_cursorRow = u8_row;
+	esos_lcd44780_vars.u8_cursorCol = u8_column;
 	esos_lcd44780_vars.b_cursorPositionNeedsUpdate = TRUE;
 
 }
@@ -229,8 +228,8 @@ void esos_lcd44780_writeChar( uint8_t u8_row, uint8_t u8_column, uint8_t u8_data
 	esos_lcd44780_vars.ab_lcdBufferNeedsUpdate[u8_row][u8_column] = TRUE;
 	
 }
-
 uint8_t esos_lcd44780_getChar( uint8_t u8_row, uint8_t u8_column )
+
 {
 	return esos_lcd44780_vars.aac_lcdBuffer[u8_row][u8_column];
 }
@@ -239,7 +238,6 @@ void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_
 {
     // Write u8_bufflen characters from pu8_data to (u8_row,u8_column)
 	// TODO:  Write hardware-independent code here
-
 	for (int x = 0; x < u8_bufflen; x++)
 
 	{
@@ -249,22 +247,22 @@ void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_
 	}
 
 }
-
+	for( int x=0; x < u8_bufflen; x++)
+	{
+		esos_lcd44780_writeChar(u8_row, u8_column + x, pu8_data[x]);
+	}
+}
 void esos_lcd44780_getBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_data, uint8_t u8_bufflen )
 {
     // Return pu8_data with u8_bufflen characters currently displayed beginning at (u8_row,u8_column)
-	// TODO:  Write hardware-independent code here
 
 	return esos_lcd44780_writeBuffer(0, 0, pu8_data, u8_bufflen);
-	
-
 }
 
 void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_data )
 {
     // Write zero-terminated string psz_data to location starting at (u8_row,u8_column)
 	// TODO:  Write hardware-independent code here
-
 	for (int x = 0; x < length(psz_data); x++)
 
 	{
