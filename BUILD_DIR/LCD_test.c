@@ -42,7 +42,7 @@ ESOS_USER_TASK(loop) {
 
 void user_init(void){
 	esos_uif14_flashLED3(500);
-    config_esos_uiF14();
+	config_esos_uiF14();
 	esos_RegisterTask(initLCDtest);
     esos_RegisterTask(loop);
 
