@@ -337,7 +337,7 @@ void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
     // Return pu8_charData with custom character memory for u8_charSlot
 	// TODO:  Write hardware-independent code here
 	
-	// return pu8_charData;
+	 return esos_lcd44780_varss.pu8_charData;
 }
 
 BOOL esos_lcd44780_isCurrent( void )
