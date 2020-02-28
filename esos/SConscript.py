@@ -17,6 +17,7 @@ ESOSSupportLibSources = [
   'src/esos_comm.c',
   'src/pic24/esos_pic24_irq.c',
   'src/pic24/esos_pic24_sensor.c',
-  'src/esos_f14ui.c']
+  'src/esos_f14ui.c',
+  'src/pic24/esos_pic24_lcd44780.c']
 
 env = env.Clone(CPPDEFINES=['BUILT_ON_ESOS' '_NOASSERT'])
