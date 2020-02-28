@@ -101,6 +101,13 @@
 #define  __ESOS_LCD44780_HW_CLEAR_D7            __ESOS_LCD44780_PIC24_CLEAR_D7
 #define  __ESOS_LCD44780_HW_GET_D7              __ESOS_LCD44780_PIC24_GET_D7
 
+#define  __ESOS_LCD44780_PIC24_SET_E_HIGH       (LCD_E = 1)   // E=1
+#define  __ESOS_LCD44780_PIC24_SET_E_LOW        (LCD_E = 0)   // E=0
+#define  __ESOS_LCD44780_PIC24_SET_RW_READ      (LCD_RW = 1)  // RW=1
+#define  __ESOS_LCD44780_PIC24_SET_RW_WRITE     (LCD_RW = 0)  // RW=0
+#define  __ESOS_LCD44780_PIC24_SET_RS_REGISTERS (LCD_RS = 0)  // RS=0
+#define  __ESOS_LCD44780_PIC24_SET_RS_DATA      (LCD_RS = 1)  // RS=1
+
 #define __ESOS_LCD44780_PIC24_SET_D0            (LCD_D0 = 1)
 #define __ESOS_LCD44780_PIC24_CLEAR_D0          (LCD_D0 = 0)
 #define  __ESOS_LCD44780_PIC24_GET_D0           (LCD_D0)
