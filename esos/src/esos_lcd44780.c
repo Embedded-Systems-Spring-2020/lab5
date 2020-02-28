@@ -259,21 +259,20 @@ void esos_lcd44780_getBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_da
 	return esos_lcd44780_writeBuffer(0, 0, pu8_data, u8_bufflen);
 }
 
-void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_data )
-{
+void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_data ) {
     // Write zero-terminated string psz_data to location starting at (u8_row,u8_column)
 	// TODO:  Write hardware-independent code here
-	for (int x = 0; x < length(psz_data); x++)
-
-	{
-
-		while (psz_data[x] != '\0')
-
-		{
-			esos_lcd44780_writeChar(u8_row, u8_column, psz_data[x]);
+	for(int i = 0; i < sizeof(psz_data)/sizeof(psz_data[0]); i++) {
+		if (psz_data[i] == '\0') {
+			break;
+		} else {
+			esos_lcd44780_writeChar(u8_row, u8_column + i, psz_data[i]);
 		}
 
 	}
+
+
+}
 
 void esos_lcd44780_setCursorDisplay( BOOL u8_state )
 {
