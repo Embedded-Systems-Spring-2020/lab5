@@ -22,7 +22,7 @@ ESOS_USER_TASK(initLCDtest) {
 		while (esos_IsUserFlagClear){
 			esos_lcd44780_init();
 			esos_lcd44780_configDisplay();
-			esos_lcd44780_writeString( 0, 0, ac_testString ); outputs test message to LCD top row, far left
+			esos_lcd44780_writeString( 0, 0, ac_testString ); //outputs test message to LCD top row, far left
 			ESOS_TASK_WAIT_TICKS(1000);
 			esos_lcd44780_clearScreen();
 			esos_SetUserFlag(LCD_IS_READY);
