@@ -15,13 +15,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define LCD_IS_READY ESOS_USER_FLAG_1
-esos_ClearUserFlag(LCD_IS_READY);
+
+//esos_ClearUserFlag(LCD_IS_READY);
 ESOS_USER_TASK(initLCDtest) {
 	char ac_testString[] = "LCD test";
     ESOS_TASK_BEGIN();
-		while (esos_IsUserFlagClear(LCD_IS_READY)){
+		while(esos_IsUserFlagSet(LCD_IS_READY)){
 			esos_lcd44780_init();
 			esos_lcd44780_configDisplay();
 			esos_lcd44780_writeString( 0, 0, ac_testString ); //outputs test message to LCD top row, far left
