@@ -9,6 +9,8 @@
 #include "esos_pic24.h"
 #include "esos_sensor.h"
 
+#include "esos_lcd44780.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,7 +43,7 @@ ESOS_USER_TASK(loop) {
 }
 
 void user_init(void){
-	esos_uif14_flashLED3(500);
+	esos_uiF14_flashLED3(500);
 	config_esos_uiF14();
 	esos_RegisterTask(initLCDtest);
     esos_RegisterTask(loop);
