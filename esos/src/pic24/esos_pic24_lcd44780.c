@@ -33,7 +33,8 @@
  */
  
 /*** I N C L U D E S *************************************************/
-#include "esos_pic24_lcd.h"
+#include <esos_pic24.h>
+#include "esos_pic24_lcd44780.h"
 
 /*** T H E   C O D E *************************************************/
 void __esos_lcd44780_pic24_config(void)
@@ -66,7 +67,8 @@ void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 	uint8_t u8_data_working_copy = u8_data;
 	int lsb_value = 0;
 
-	for (int i = 0; i < 8; i++) {
+	int i;
+	for (i = 0; i < 8; i++) {
 		lsb_value = u8_data & 0x01;
 		switch(i) {
 			case 0:
@@ -118,7 +120,8 @@ uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 
 	uint8_t u8_data = 0x00;
 
-	for (int i = 0; i < 8; i++) {
+	int i;
+	for (i = 0; i < 8; i++) {
 		switch(i) {
 			case 0:
 				u8_data = u8_data | LCD_D7;
