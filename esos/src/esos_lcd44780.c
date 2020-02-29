@@ -322,21 +322,27 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
     // Set custom character memory for u8_charSlot to data in pu8_charData
 	// TODO:  Write hardware-independent code here
-	
-    // pu8_charData=&u8_charSlot;
-		
+
+	//u8_charSlot -> Slot memory should be allocated for that contains character value 0-7 
+	//pu8_charData-> Pointer to array of character data 
+	//array that points to 8-data bits from u8_charSlot
+
+     pu8_charData=&u8_charSlot;
 }
 
 void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
     // Return pu8_charData with custom character memory for u8_charSlot
 	// TODO:  Write hardware-independent code here
-	
-	// Reason for commenting out:
-	// - esos_lcd44780_vars has no pu8_charData member
-	// - function should not return anything
-	
-	//return esos_lcd44780_vars.pu8_charData;
+
+
+	for (int i = 0; i < 8 ; i++)
+	{
+		pu8_charData = &u8_charSlot[i];
+		//*pu8_charData; //dereferencing pointer will give me the value 
+	}
+
+
 }
 
 BOOL esos_lcd44780_isCurrent( void )
