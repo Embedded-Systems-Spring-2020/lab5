@@ -336,7 +336,10 @@ void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 	// - esos_lcd44780_vars has no pu8_charData member
 	// - function should not return anything
 	
-	//return esos_lcd44780_vars.pu8_charData;
+	for (int i = 0; i < u8_charSlot; i++)
+	{
+		pu8_charData[i];
+	}
 }
 
 BOOL esos_lcd44780_isCurrent( void )
