@@ -69,14 +69,14 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 	ESOS_TASK_BEGIN();
 
 
-	// TODO: remove the magic numbers in this section
-	ESOS_TASK_WAIT_TICKS(15);			// Wait >15 msec after power is applied
+	__ESOS_LCD44780_PIC24_SET_E_LOW;
+	ESOS_TASK_WAIT_TICKS(100);			// Wait >15 msec after power is applied
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(5);			// must wait 5ms, busy flag not available
+	ESOS_TASK_WAIT_TICKS(10);			// must wait 5ms, busy flag not available
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(1600);			// must wait 160us, busy flag not available
+	ESOS_TASK_WAIT_TICKS(10);			// must wait 160us, busy flag not available
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(1600);			// must wait 160us, busy flag not available
+	ESOS_TASK_WAIT_TICKS(10);			// must wait 160us, busy flag not available
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x38);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x10);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x0C);
@@ -93,7 +93,7 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 
 	while(TRUE) {
 		static uint8_t i, u8_col, u8_row;
-
+		printf("in the service loop\n");
 		if(esos_lcd44780_vars.b_cursorPositionNeedsUpdate) {
 			esos_lcd44780_vars.b_cursorPositionNeedsUpdate = FALSE;
 			ESOS_TASK_WAIT_LCD44780_SET_DATA_ADDRESS(esos_lcd44780_vars.u8_cursorRow > 0 ? 0x40 : 0x00 |
