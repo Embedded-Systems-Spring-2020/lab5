@@ -42,6 +42,11 @@
 
 /* I N C L U D E S **********************************************************/
 //#include <esos_lcd.h>
+#include <pic24_ports_config.h>
+
+#define _RD10
+#define _RD11
+#define _RC12
 
 //Pin Configs
 #define LCD_D0 (_RE0)

@@ -32,10 +32,11 @@
  * @{
  */
  
-#include "esos_lcd44780.h"
-#include "esos_pic24_lcd44780.h"
+#include <esos_lcd44780.h>
+#include <esos_pic24_lcd44780.h>
 #include <esos.h>
 #include <stdlib.h>
+#include <pic24_ports_config.h>
 
 // Main data structure for updating lcd44780
 struct {
