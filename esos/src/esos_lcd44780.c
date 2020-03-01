@@ -330,7 +330,7 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 	//u8_charSlot -> Slot memory should be allocated for, that contains 8bit character value 0-7 
 	//pu8_charData-> Pointer to array of 8 bit character data from u8_charSlot
 
-    esos_lcd44780_vars.ast_lcdcustomChar[u8_charSlot]=pu8_charData;
+    esos_lcd44780_vars.ast_customChar[u8_charSlot]=pu8_charData;
 }
 
 /*void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
@@ -338,7 +338,7 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
     // Return pu8_charData with custom character memory for u8_charSlot
 	// TODO:  Write hardware-independent code here
 
-	pu8_charData = esos_lcd44780_vars.ast_lcdcustomChar[u8_charSlot];
+	pu8_charData = esos_lcd44780_vars.ast_customChar[u8_charSlot];
 
 }*/
 
