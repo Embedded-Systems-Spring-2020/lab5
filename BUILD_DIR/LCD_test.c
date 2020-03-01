@@ -3,7 +3,7 @@
 #include "pic24_ports_config.h"
 
 #include <esos.h>
-#include <esos_task.h>
+//#include <esos_task.h>
 #include "esos_comm.h"
 #include "esos_f14ui.h"
 #include "esos_pic24.h"
@@ -21,17 +21,21 @@ ESOS_USER_TASK(initLCDtest) {
 	static char ac_testString[] = "LCD test";
     ESOS_TASK_BEGIN();
 		while(esos_IsUserFlagClear(LCD_IS_READY)){
+			//printf("num of tasks %i", esos_GetNumberRegisteredTasks());
 			esos_lcd44780_init();
-			printf("init\n");
+			//printf("num of tasks %i", esos_GetNumberRegisteredTasks());
 			ESOS_TASK_WAIT_TICKS(10);
 			esos_lcd44780_configDisplay();
-			printf("config\n");
+			
 			esos_lcd44780_writeChar(0,0, 'A');
 			//esos_lcd44780_writeString( 0, 0, ac_testString ); //outputs test message to LCD top row, far left
 			ESOS_TASK_WAIT_TICKS(1000);
 			//esos_lcd44780_clearScreen();
-			printf("clear\n");
+			
 			esos_SetUserFlag(LCD_IS_READY);
+		}
+		if (ESOS_IS_TASK_INITED(esos_GetTaskHandleFromID(__esos_lcd44780_service))){
+			printf("task initialized");
 		}
 	ESOS_TASK_END();
 }
