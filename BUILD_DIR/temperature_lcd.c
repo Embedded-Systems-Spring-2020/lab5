@@ -8,6 +8,7 @@
 #include "esos_f14ui.h"
 #include "esos_pic24.h"
 #include "esos_sensor.h"
+#include "esos_pic24_sensor.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,35 +58,43 @@ ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of d
 ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of data
 	uint64_t u64_temp_data; //need 64 bit to handle big number calc tho result will be small
 	char ac_pot_top_row[] = "LM60";  
-	char ac_pot_bottom_row[] = "C";  
+	char ac_pot_bottom_row[] = "C"; 
+	char c_DecDisplay1;
+	char c_DecDisplay2;
 	ESOS_TASK_BEGIN();
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 2, ac_pot_bottom_row);
 		u64_temp_data = (uint64_t)(((300000 * u16_num2graph/4096) - 42400) / 625);
-		esos_lcd44780_writeChar( 1, 0, (uint8_t)(u64_temp_data / 16));
-		esos_lcd44780_writeChar( 1, 1, (uint8_t)(u64_temp_data - (u64_temp_data / 16)));
+		
+		c_DecDisplay1 = '0' + (uint8_t)(u64_temp_data / 10);
+		c_DecDisplay2 = '0' + (uint8_t)(u64_temp_data % 10);
+		esos_lcd44780_writeChar( 1, 0, c_DecDisplay1);
+		esos_lcd44780_writeChar( 1, 1, c_DecDisplay2);
 	ESOS_TASK_END();
 }
 /****************************************************************************/
 #define DISPLAY_TEMP ESOS_USER_FLAG_2	
 ESOS_USER_TASK(loop) {
 	static uint16_t u16_data;
+	
 	static ESOS_TASK_HANDLE th_pot_display_LCD;
 	static ESOS_TASK_HANDLE th_temp_display_LCD;
 	ESOS_TASK_BEGIN();
 		while(1){
 			if (esos_IsUserFlagClear(DISPLAY_TEMP)){
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH02, ESOS_SENSOR_VREF_3V3);	
-				ESOS_TASK_WAIT_SENSOR_QUICK_READ(u16_data);
+				ESOS_TASK_WAIT_SENSOR_READ(u16_data, ESOS_SENSOR_ONE_SHOT, ESOS_SENSOR_FORMAT_BITS);
 				esos_lcd44780_clearScreen();
 				ESOS_ALLOCATE_CHILD_TASK(th_pot_display_LCD);
-				ESOS_TASK_SPAWN_AND_WAIT(th_pot_display_LCD, pot_display_LCD, u16_data);			
+				ESOS_TASK_SPAWN_AND_WAIT(th_pot_display_LCD, pot_display_LCD, u16_data);
+				ESOS_SENSOR_CLOSE();
 			}else {
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH03, ESOS_SENSOR_VREF_3V0);	
-				ESOS_TASK_WAIT_SENSOR_QUICK_READ(u16_data);
+				ESOS_TASK_WAIT_SENSOR_READ(u16_data, ESOS_SENSOR_ONE_SHOT, ESOS_SENSOR_FORMAT_BITS);
 				esos_lcd44780_clearScreen();
 				ESOS_ALLOCATE_CHILD_TASK(th_temp_display_LCD);
 				ESOS_TASK_SPAWN_AND_WAIT(th_temp_display_LCD, temp_display_LCD, u16_data);
+				ESOS_SENSOR_CLOSE();
 			}
 			if (esos_uiF14_isSW3Pressed()){  //SW3 toggles display between pot and temp
 				ESOS_TASK_WAIT_UNTIL(esos_uiF14_isSW3Released());
