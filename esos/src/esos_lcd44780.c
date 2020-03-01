@@ -322,7 +322,7 @@ BOOL esos_lcd44780_getDisplayVisible( void )
 	return esos_lcd44780_vars.b_displayVisible;
 }
 
-void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
+/*void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
     // Set custom character memory for u8_charSlot to data in pu8_charData
 	// TODO:  Write hardware-independent code here
@@ -331,7 +331,7 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 	//pu8_charData-> Pointer to array of 8 bit character data from u8_charSlot
 
     esos_lcd44780_vars.ast_lcdcustomChar[u8_charSlot]=pu8_charData;
-}
+}*/
 
 /*void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
