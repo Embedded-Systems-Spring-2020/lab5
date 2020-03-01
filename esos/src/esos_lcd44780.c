@@ -338,6 +338,8 @@ BOOL esos_lcd44780_getDisplayVisible( void )
     // Return pu8_charData with custom character memory for u8_charSlot
 	// TODO:  Write hardware-independent code here
 
+	pu8_charData = esos_lcd44780_vars.ast_customChar[u8_charSlot];
+
 }*/
 
 BOOL esos_lcd44780_isCurrent( void )
