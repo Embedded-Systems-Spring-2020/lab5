@@ -264,16 +264,7 @@ void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_dat
 	
 	for (i = 0; psz_data[i] != '\0'; i++) {
 		esos_lcd44780_writeChar(u8_row, u8_column + i, psz_data[i]);
-	}
-	
-	// while (psz_data[i] =! '\0') {
-		// printf("i is: %d\n", i);
-		// printf("Writing character: %c\n", psz_data[i]);
-	
-		// esos_lcd44780_writeChar(u8_row, u8_column + i, psz_data[i]);
-		// ++i;
-	// }
-	
+	}	
 }
 
 void esos_lcd44780_setCursorDisplay( BOOL u8_state )
@@ -330,15 +321,25 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 	//u8_charSlot -> Slot memory should be allocated for, that contains 8bit character value 0-7 
 	//pu8_charData-> Pointer to array of 8 bit character data from u8_charSlot
 
-    esos_lcd44780_vars.ast_lcdcustomChar[u8_charSlot]=pu8_charData;
+	int i;
+
+	for (i = 0; i < 8; i++) {
+		esos_lcd44780_vars.ast_customChar[u8_charSlot].au8_data[i] = pu8_charData[i];
+	}
+	printf("Registered a char!\n");
 }
 
-/*void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
+void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 {
     // Return pu8_charData with custom character memory for u8_charSlot
 	// TODO:  Write hardware-independent code here
+	int i;
 
-}*/
+	for (i = 0; i < 8; i++) {
+		pu8_charData[i] = esos_lcd44780_vars.ast_customChar[u8_charSlot].au8_data[i];
+	}
+
+}
 
 BOOL esos_lcd44780_isCurrent( void )
 {

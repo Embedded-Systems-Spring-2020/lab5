@@ -60,44 +60,6 @@ void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 	 LCD_D2 = (u8_data >> 2) & 0x01;
 	 LCD_D1 = (u8_data >> 1) & 0x01;
 	 LCD_D0 = (u8_data >> 0) & 0x01;
-
-
-	// Assuming that the first bit of u8_data is the DB0 and the last bit of 
-	// u8_data is the DB7
-	/*uint8_t u8_data_working_copy = u8_data;
-	int lsb_value = 0;
-
-	int i;
-	for (i = 0; i < 8; i++) {
-		lsb_value = u8_data & 0x01;
-		switch(i) {
-			case 0:
-				LCD_D0 = lsb_value;
-				break;
-			case 1:
-				LCD_D1 = lsb_value;
-				break;
-			case 2:
-				LCD_D2 = lsb_value;
-				break;
-			case 3:
-				LCD_D3 = lsb_value;
-				break;
-			case 4:
-				LCD_D4 = lsb_value;
-				break;
-			case 5:
-				LCD_D5 = lsb_value;
-				break;
-			case 6:
-				LCD_D6 = lsb_value;
-				break;		
-			case 7:
-				LCD_D7 = lsb_value;
-				break;
-		}
-		u8_data_working_copy = u8_data_working_copy >> 1;
-	}*/
 }
 
 uint8_t __esos_lcd44780_pic24_getDataPins(void) {
@@ -116,48 +78,6 @@ uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 	 u8_data |= LCD_D2 << 2;
 	 u8_data |= LCD_D1 << 1;
 	 u8_data |= LCD_D0 << 0;
-
-
-	/*uint8_t u8_data = 0x00;
-
-	int i;
-	for (i = 0; i < 8; i++) {
-		switch(i) {
-			case 0:
-				u8_data = u8_data | LCD_D7;
-				break;
-
-			case 1:
-				u8_data = u8_data | LCD_D6;
-				break;
-
-			case 2:
-				u8_data = u8_data | LCD_D5;
-				break;
-
-			case 3:
-				u8_data = u8_data | LCD_D4;
-				break;
-
-			case 4:
-				u8_data = u8_data | LCD_D3;
-				break;
-
-			case 5:
-				u8_data = u8_data | LCD_D2;
-				break;
-
-			case 6:
-				u8_data = u8_data | LCD_D1;
-				break;
-
-			case 7:
-				u8_data = u8_data | LCD_D0;
-				break;
-		}
-
-		if (i != 7) u8_data = u8_data << 1;
-	}*/
 
 	return u8_data;
 }
