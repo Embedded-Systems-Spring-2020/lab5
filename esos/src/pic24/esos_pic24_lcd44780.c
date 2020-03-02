@@ -49,9 +49,7 @@ void __esos_lcd44780_pic24_setDataPins(uint8_t u8_data) {
 	// write the hardware-specific code to take the u8_data passed in
 	// and place it on the appropriate data pins
 
-	//printf("setPins\n");
-	//Suggestion: more compact way of settig pins from byte
-	//where the MSb is LCD_D7
+	
 	 LCD_D7 = (u8_data >> 7) & 0x01;
 	 LCD_D6 = (u8_data >> 6) & 0x01;
 	 LCD_D5 = (u8_data >> 5) & 0x01;
@@ -66,8 +64,7 @@ uint8_t __esos_lcd44780_pic24_getDataPins(void) {
 	// write the hardware-specific code to read the appropriate data pins
 	// and create the uint8 data to return to the caller
 
-	//Suggestion: more compact way of constructing return byte
-	//where the MSb is LCD_D7
+	
 	 uint8_t u8_data = 0;
 
 	 u8_data |= LCD_D7 << 7;
