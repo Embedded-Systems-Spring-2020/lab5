@@ -70,40 +70,42 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 	// The LCD service hidden task will need to maintain a buffer containing the LCD character display
 	ESOS_TASK_BEGIN();
 
-	__ESOS_LCD44780_PIC24_SET_E_LOW;
-	__ESOS_LCD44780_HW_CLEAR_D0();
-	__ESOS_LCD44780_HW_CLEAR_D3();
 	ESOS_TASK_WAIT_TICKS(100);			// Wait >15 msec after power is applied
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
-	ESOS_TASK_WAIT_TICKS(10);			// must wait 5ms, busy flag not available
+	__esos_lcd44780_hw_setDataPins(0x30);
+	ESOS_TASK_WAIT_TICKS(30);
+
+	//nybble
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_WAIT_TICKS(1);
 	__ESOS_LCD44780_HW_SET_E_LOW();
-	ESOS_TASK_WAIT_TICKS(10);			
-	__ESOS_LCD44780_HW_SET_E_HIGH();
-	ESOS_TASK_WAIT_TICKS(1);
-	__ESOS_LCD44780_HW_SET_E_LOW();
+	
 	ESOS_TASK_WAIT_TICKS(10);
+
+	//nybble
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_WAIT_TICKS(1);
 	__ESOS_LCD44780_HW_SET_E_LOW();
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x20);
+	
+	ESOS_TASK_WAIT_TICKS(10);
+
+	//nybble
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_WAIT_TICKS(1);
 	__ESOS_LCD44780_HW_SET_E_LOW();
+	
+	ESOS_TASK_WAIT_TICKS(10);
+
+	__esos_lcd44780_hw_setDataPins(0x20);
+
+	//nybble
+	__ESOS_LCD44780_HW_SET_E_HIGH();
+	ESOS_TASK_WAIT_TICKS(1);
+	__ESOS_LCD44780_HW_SET_E_LOW();
+
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x28);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x10);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x0F);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x06);
-
-	// Send startup sequence from datasheet
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF);
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_FUNCTION_SET | 0b00011100);
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF |
-                                            ESOS_LCD44780_CMD_DISPLAY_ON_OFF_CUR |
-                                            ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISP);
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_ENTRY_MODE_SET |
-                                            ESOS_LCD44780_CMD_ENTRY_MODE_SET_INC);
 
 	while(TRUE) {
 		static uint8_t i, u8_col, u8_row;
@@ -411,7 +413,7 @@ ESOS_CHILD_TASK(__esos_lcd44780_read_u8, uint8_t *pu8_data, BOOL b_isData, BOOL 
 	ESOS_TASK_YIELD();
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	
-	*pu8_data = pu8_data | (0x0F & (((uint8_t)__esos_lcd44780_hw_getDataPins()) >> 4));
+	// *pu8_data = pu8_data | (0x0F & (((uint8_t)__esos_lcd44780_hw_getDataPins()) >> 4));
 
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	ESOS_TASK_YIELD();
@@ -439,13 +441,13 @@ ESOS_CHILD_TASK(__esos_lcd44780_write_u8, uint8_t u8_data, BOOL b_isData, BOOL b
     __ESOS_LCD44780_HW_SET_RW_WRITE();
 	__esos_lcd44780_hw_configDataPinsAsOutput();
     
-    __esos_lcd44780_hw_setDataPins( 0x0F & (u8_data >> 4) );
+    __esos_lcd44780_hw_setDataPins( u8_data & 0xF0 );
 
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	
-	__esos_lcd44780_hw_setDataPins( 0x0F & (u8_data << 4) );
+	__esos_lcd44780_hw_setDataPins( (u8_data << 4) & 0xF0 );
 	
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
