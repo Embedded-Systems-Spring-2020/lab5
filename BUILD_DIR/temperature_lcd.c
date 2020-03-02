@@ -20,6 +20,7 @@
 #define CHAR_POSITIONS 8
 
 void _init_custom_chars();
+void _temp_to_graph(uint8_t);
 
 /**********************************************************************/
 
@@ -41,13 +42,18 @@ ESOS_USER_TASK(initLCDtest) {
 }
 /*************************************************************************/
 ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of data
+	//shift 16 bit num2graph 8 bits right for display
+	uint8_t u8_scaled_data = u16_num2graph / 16;
+	char ac_pot_top_row[] = "pot 0x";
+	
+	//for slider graphic
+	char ac_pot_bottom_row[] = "--------";  
 	uint8_t u8_slider_pos = 0;
-	char ac_pot_top_row[] = "pot 0x";  //need to write num2graph somehow
-	esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8((uint8_t)u16_num2graph));
-	esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8((uint8_t)u16_num2graph));
-	char ac_pot_bottom_row[] = "________";  //would rather use char D2
 	char ac_slider[] = "|";
+	
 	ESOS_TASK_BEGIN();
+		esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8(u8_scaled_data));
+		esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8(u8_scaled_data));
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 0, ac_pot_bottom_row);
 		u8_slider_pos = u16_num2graph / 512;  //ADC output 2^12 into 8 increments 
@@ -57,6 +63,7 @@ ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of d
 /**************************************************************************/
 ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of data
 	uint64_t u64_temp_data; //need 64 bit to handle big number calc tho result will be small
+	uint8_t u8_data_value;
 	char ac_pot_top_row[] = "LM60";  
 	char ac_pot_bottom_row[] = "C"; 
 	char c_DecDisplay1;
@@ -64,12 +71,17 @@ ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of 
 	ESOS_TASK_BEGIN();
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 2, ac_pot_bottom_row);
+
 		u64_temp_data = (uint64_t)(((300000 * u16_num2graph/4096) - 42400) / 625);
+
+		u8_data_value = (uint8_t) u64_temp_data;
 		
 		c_DecDisplay1 = '0' + (uint8_t)(u64_temp_data / 10);
 		c_DecDisplay2 = '0' + (uint8_t)(u64_temp_data % 10);
 		esos_lcd44780_writeChar( 1, 0, c_DecDisplay1);
 		esos_lcd44780_writeChar( 1, 1, c_DecDisplay2);
+
+		_temp_to_graph(u8_data_value);
 	ESOS_TASK_END();
 }
 /****************************************************************************/
@@ -121,9 +133,9 @@ void user_init(void){
 	_init_custom_chars();
 }
 
-void _init_custom_chars() {
+void _init_custom_chars() {  //these are the custom characters needed to create thermometer
 	int i;
-
+	//zero bars and 8 bars are already characters
 	uint8_t aau8_char_data[CUSTOM_CHARS][CHAR_POSITIONS] = {
 		 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF},	// one slice
 		 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF},
@@ -135,7 +147,87 @@ void _init_custom_chars() {
 	};
 
 	for (i = 0; i < CUSTOM_CHARS; i++) {
-		esos_lcd44780_setCustomChar(i, aau8_char_data + i);
+		esos_lcd44780_setCustomChar(i, aau8_char_data[i]);
+	}
+}
+
+void _temp_to_graph(uint8_t temp) { //writes the 'rising thermometer' effect
+	switch (temp) {
+		case 20:
+			esos_lcd44780_writeChar(1, 7, 0xFE);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 21:
+			esos_lcd44780_writeChar(1, 7, 0x00); //one
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 22:
+			esos_lcd44780_writeChar(1, 7, 0x01); //two
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 23:
+			esos_lcd44780_writeChar(1, 7, 002); //three
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 24:
+			esos_lcd44780_writeChar(1, 7, 0x03); //four
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 25:
+			esos_lcd44780_writeChar(1, 7, 0x04); //five
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 26:
+			esos_lcd44780_writeChar(1, 7, 0x05); //six
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 27:
+			esos_lcd44780_writeChar(1, 7, 0x06); // seven
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+		case 28:
+			esos_lcd44780_writeChar(1, 7, 0x07); //full
+			esos_lcd44780_writeChar(0, 7, 0xFE);
+			break;
+
+
+		case 29:
+			//bottom full
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			//top changes
+			esos_lcd44780_writeChar(0, 7, 0x01); // one 
+			break;
+		case 30:
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			esos_lcd44780_writeChar(0, 7, 0x02); // two
+			break;
+		case 31:
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			esos_lcd44780_writeChar(0, 7, 0x03); // three
+			break;
+		case 32:
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			esos_lcd44780_writeChar(0, 7, 0x04); // four
+			break;
+		case 33:
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			esos_lcd44780_writeChar(0, 7, 0x05); // five 
+			break;
+		case 34:
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			esos_lcd44780_writeChar(0, 7, 0x06); // six
+			break;
+		case 35:
+			esos_lcd44780_writeChar(1, 7, 0xFF);
+
+			esos_lcd44780_writeChar(0, 7, 0x07); // seven
+			break;
 	}
 }
 
