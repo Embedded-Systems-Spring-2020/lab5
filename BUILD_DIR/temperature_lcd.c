@@ -23,33 +23,20 @@ void _init_custom_chars();
 void _temp_to_graph(uint8_t);
 
 /**********************************************************************/
-
-
-#define LCD_IS_READY  ESOS_USER_FLAG_1
-//esos_ClearUserFlag(LCD_IS_READY);
-ESOS_USER_TASK(initLCDtest) {
-	char ac_testString[] = "LCD test";
-    ESOS_TASK_BEGIN();
-		while (esos_IsUserFlagClear(LCD_IS_READY)){
-			
-			esos_lcd44780_configDisplay();
-			esos_lcd44780_writeString( 0, 0, ac_testString ); 
-			ESOS_TASK_WAIT_TICKS(1000);
-			esos_lcd44780_clearScreen();
-			esos_SetUserFlag(LCD_IS_READY);
-		}
-	ESOS_TASK_END();
-}
-/*************************************************************************/
-ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of data
-	uint8_t u8_slider_pos = 0;
+ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of pot data
+	
+	//shift 16 bit num2graph 8 bits right for display
 	uint8_t u8_scaled_data = u16_num2graph / 16;
-	char ac_pot_top_row[] = "pot 0x";  //need to write num2graph somehow
-	esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8(u8_scaled_data));
-	esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8(u8_scaled_data));
-	char ac_pot_bottom_row[] = "--------";  //would rather use char D2
+	char ac_pot_top_row[] = "pot 0x";
+	
+	//for slider graphic
+	char ac_pot_bottom_row[] = "--------";  
+	uint8_t u8_slider_pos = 0;
 	char ac_slider[] = "|";
+	
 	ESOS_TASK_BEGIN();
+		esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8(u8_scaled_data));
+		esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8(u8_scaled_data));
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 0, ac_pot_bottom_row);
 		u8_slider_pos = u16_num2graph / 512;  //ADC output 2^12 into 8 increments 
@@ -57,7 +44,7 @@ ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of d
 	ESOS_TASK_END();
 }
 /**************************************************************************/
-ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of data
+ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of temp data
 	uint64_t u64_temp_data; //need 64 bit to handle big number calc tho result will be small
 	uint8_t u8_data_value;
 	char ac_pot_top_row[] = "LM60";  
@@ -67,35 +54,40 @@ ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of 
 	ESOS_TASK_BEGIN();
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
 		esos_lcd44780_writeString( 1, 2, ac_pot_bottom_row);
-		u64_temp_data = (uint64_t)(((300000 * u16_num2graph/4096) - 42400) / 625);
 		
+		//formula from data sheet massaged to avoid floats; bits from ADC to temp in C
+		u64_temp_data = (uint64_t)(((300000 * u16_num2graph/4096) - 42400) / 625);
+		//after calculation, all info in bottom 8 bits
 		u8_data_value = (uint8_t) u64_temp_data;
-
+		 
+		//convert to decimal and display
 		c_DecDisplay1 = '0' + (uint8_t)(u64_temp_data / 10);
 		c_DecDisplay2 = '0' + (uint8_t)(u64_temp_data % 10);
 		esos_lcd44780_writeChar( 1, 0, c_DecDisplay1);
 		esos_lcd44780_writeChar( 1, 1, c_DecDisplay2);
-
+		
+		//make the thermometer graphic
 		_temp_to_graph(u8_data_value);
+		
 	ESOS_TASK_END();
 }
 /****************************************************************************/
-#define DISPLAY_TEMP ESOS_USER_FLAG_2	
+#define DISPLAY_TEMP ESOS_USER_FLAG_2	//SW3 will flip flag back and forth
 ESOS_USER_TASK(loop) {
 	static uint16_t u16_data;
-	
+	//temp vs pot display handled by 2 different child tasks
 	static ESOS_TASK_HANDLE th_pot_display_LCD;
 	static ESOS_TASK_HANDLE th_temp_display_LCD;
 	ESOS_TASK_BEGIN();
 		while(1) {
-			if (esos_IsUserFlagClear(DISPLAY_TEMP)){
+			if (esos_IsUserFlagClear(DISPLAY_TEMP)){ //do this for pot display
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH02, ESOS_SENSOR_VREF_3V3);	
 				ESOS_TASK_WAIT_SENSOR_READ(u16_data, ESOS_SENSOR_ONE_SHOT, ESOS_SENSOR_FORMAT_BITS);
 				esos_lcd44780_clearScreen();
 				ESOS_ALLOCATE_CHILD_TASK(th_pot_display_LCD);
 				ESOS_TASK_SPAWN_AND_WAIT(th_pot_display_LCD, pot_display_LCD, u16_data);
-				ESOS_SENSOR_CLOSE();
-			}else {
+				ESOS_SENSOR_CLOSE(); //must release ADC for others
+			}else { //do this for temp display
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH03, ESOS_SENSOR_VREF_3V0);	
 				ESOS_TASK_WAIT_SENSOR_READ(u16_data, ESOS_SENSOR_ONE_SHOT, ESOS_SENSOR_FORMAT_BITS);
 				esos_lcd44780_clearScreen();
@@ -120,18 +112,19 @@ ESOS_USER_TASK(loop) {
 
 void user_init(void){
     config_esos_uiF14();
-	//esos_RegisterTask(initLCDtest);
-    esos_RegisterTask(loop);
+	esos_uiF14_flashLED3(500);
+	esos_RegisterTask(loop);
+	//the following 4 lines prepare the LCD
 	esos_lcd44780_init();
 	esos_lcd44780_configDisplay();
 	esos_lcd44780_clearScreen();
 	_init_custom_chars();
-	esos_uiF14_flashLED3(500);
+	
 }
 
-void _init_custom_chars() {
+void _init_custom_chars() {  //these are the custom characters needed to create thermometer
 	int i;
-
+	//zero bars and 8 bars are already characters
 	uint8_t aau8_char_data[CUSTOM_CHARS][CHAR_POSITIONS] = {
 		 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF},	// one slice
 		 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF},
@@ -147,7 +140,7 @@ void _init_custom_chars() {
 	}
 }
 
-void _temp_to_graph(uint8_t temp) {
+void _temp_to_graph(uint8_t temp) { //writes the 'rising thermometer' effect
 	switch (temp) {
 		case 20:
 			esos_lcd44780_writeChar(1, 7, 0xFE);
@@ -158,7 +151,7 @@ void _temp_to_graph(uint8_t temp) {
 			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 22:
-			esos_lcd44780_writeChar(1, 7, 001); //two
+			esos_lcd44780_writeChar(1, 7, 0x01); //two
 			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 23:
