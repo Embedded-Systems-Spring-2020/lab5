@@ -43,9 +43,10 @@ ESOS_USER_TASK(initLCDtest) {
 /*************************************************************************/
 ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of data
 	uint8_t u8_slider_pos = 0;
+	uint8_t u8_scaled_data = u16_num2graph / 16;
 	char ac_pot_top_row[] = "pot 0x";  //need to write num2graph somehow
-	esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8((uint8_t)u16_num2graph));
-	esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8((uint8_t)u16_num2graph));
+	esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8(u8_scaled_data));
+	esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8(u8_scaled_data));
 	char ac_pot_bottom_row[] = "--------";  //would rather use char D2
 	char ac_slider[] = "|";
 	ESOS_TASK_BEGIN();
