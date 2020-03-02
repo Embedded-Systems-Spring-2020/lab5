@@ -404,12 +404,12 @@ ESOS_CHILD_TASK(__esos_lcd44780_read_u8, uint8_t *pu8_data, BOOL b_isData, BOOL 
 
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
-	*pu8_data = 0x0F & (__esos_lcd44780_hw_getDataPins() << 4);
+	*pu8_data = 0x0F & (((uint8_t)__esos_lcd44780_hw_getDataPins()) << 4);
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	
-	*pu8_data = pu8_data | (0x0F & (__esos_lcd44780_hw_getDataPins() >> 4));
+	*pu8_data = pu8_data | (0x0F & (((uint8_t)__esos_lcd44780_hw_getDataPins()) >> 4));
 
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	ESOS_TASK_YIELD();
