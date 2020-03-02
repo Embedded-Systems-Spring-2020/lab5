@@ -46,7 +46,7 @@ ESOS_CHILD_TASK(pot_display_LCD, uint16_t u16_num2graph){  //visual display of d
 	char ac_pot_top_row[] = "pot 0x";  //need to write num2graph somehow
 	esos_lcd44780_writeChar( 0, 6, __esos_u8_GetMSBHexCharFromUint8((uint8_t)u16_num2graph));
 	esos_lcd44780_writeChar( 0, 7, __esos_u8_GetLSBHexCharFromUint8((uint8_t)u16_num2graph));
-	char ac_pot_bottom_row[] = "________";  //would rather use char D2
+	char ac_pot_bottom_row[] = "--------";  //would rather use char D2
 	char ac_slider[] = "|";
 	ESOS_TASK_BEGIN();
 		esos_lcd44780_writeString( 0, 0, ac_pot_top_row);
@@ -150,77 +150,77 @@ void _init_custom_chars() {
 void _temp_to_graph(uint8_t temp) {
 	switch (temp) {
 		case 20:
-			esos_lcd44780_writeChar(1, 7, 0b11111110);
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(1, 7, 0xFE);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 21:
 			esos_lcd44780_writeChar(1, 7, 0x00); //one
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 22:
 			esos_lcd44780_writeChar(1, 7, 001); //two
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 23:
 			esos_lcd44780_writeChar(1, 7, 002); //three
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 24:
 			esos_lcd44780_writeChar(1, 7, 0x03); //four
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 25:
 			esos_lcd44780_writeChar(1, 7, 0x04); //five
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 26:
 			esos_lcd44780_writeChar(1, 7, 0x05); //six
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 27:
 			esos_lcd44780_writeChar(1, 7, 0x06); // seven
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 		case 28:
 			esos_lcd44780_writeChar(1, 7, 0x07); //full
-			esos_lcd44780_writeChar(0, 7, 0b11111110);
+			esos_lcd44780_writeChar(0, 7, 0xFE);
 			break;
 
 
 		case 29:
 			//bottom full
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			//top changes
 			esos_lcd44780_writeChar(0, 7, 0x01); // one 
 			break;
 		case 30:
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			esos_lcd44780_writeChar(0, 7, 0x02); // two
 			break;
 		case 31:
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			esos_lcd44780_writeChar(0, 7, 0x03); // three
 			break;
 		case 32:
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			esos_lcd44780_writeChar(0, 7, 0x04); // four
 			break;
 		case 33:
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			esos_lcd44780_writeChar(0, 7, 0x05); // five 
 			break;
 		case 34:
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			esos_lcd44780_writeChar(0, 7, 0x06); // six
 			break;
 		case 35:
-			esos_lcd44780_writeChar(1, 7, 0b11111111);
+			esos_lcd44780_writeChar(1, 7, 0xFF);
 
 			esos_lcd44780_writeChar(0, 7, 0x07); // seven
 			break;
