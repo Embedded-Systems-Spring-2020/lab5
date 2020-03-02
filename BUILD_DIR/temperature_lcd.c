@@ -70,8 +70,6 @@ ESOS_CHILD_TASK(temp_display_LCD, uint16_t u16_num2graph){  //visual display of 
 		
 		u8_data_value = (uint8_t) u64_temp_data;
 
-		// printf("u8_data_value: %d\n", u8_data_value);
-
 		c_DecDisplay1 = '0' + (uint8_t)(u64_temp_data / 10);
 		c_DecDisplay2 = '0' + (uint8_t)(u64_temp_data % 10);
 		esos_lcd44780_writeChar( 1, 0, c_DecDisplay1);
@@ -88,7 +86,7 @@ ESOS_USER_TASK(loop) {
 	static ESOS_TASK_HANDLE th_pot_display_LCD;
 	static ESOS_TASK_HANDLE th_temp_display_LCD;
 	ESOS_TASK_BEGIN();
-		while(1){
+		while(1) {
 			if (esos_IsUserFlagClear(DISPLAY_TEMP)){
 				ESOS_TASK_WAIT_ON_AVAILABLE_SENSOR(ESOS_SENSOR_CH02, ESOS_SENSOR_VREF_3V3);	
 				ESOS_TASK_WAIT_SENSOR_READ(u16_data, ESOS_SENSOR_ONE_SHOT, ESOS_SENSOR_FORMAT_BITS);
@@ -113,13 +111,13 @@ ESOS_USER_TASK(loop) {
 					esos_ClearUserFlag(DISPLAY_TEMP);
 				}
 			}
+			ESOS_TASK_YIELD();
 		}
 		  
     ESOS_TASK_END();
 }
 
 void user_init(void){
-	esos_uiF14_flashLED3(500);
     config_esos_uiF14();
 	//esos_RegisterTask(initLCDtest);
     esos_RegisterTask(loop);
@@ -127,6 +125,7 @@ void user_init(void){
 	esos_lcd44780_configDisplay();
 	esos_lcd44780_clearScreen();
 	_init_custom_chars();
+	esos_uiF14_flashLED3(500);
 }
 
 void _init_custom_chars() {
