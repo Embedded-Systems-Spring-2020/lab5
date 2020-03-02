@@ -68,7 +68,6 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 	// The LCD service hidden task will need to maintain a buffer containing the LCD character display
 	ESOS_TASK_BEGIN();
 
-	printf("service loop top\n");
 	__ESOS_LCD44780_PIC24_SET_E_LOW;
 	ESOS_TASK_WAIT_TICKS(100);			// Wait >15 msec after power is applied
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
@@ -417,11 +416,18 @@ ESOS_CHILD_TASK(__esos_lcd44780_write_u8, uint8_t u8_data, BOOL b_isData, BOOL b
     __ESOS_LCD44780_HW_SET_RW_WRITE();
 	__esos_lcd44780_hw_configDataPinsAsOutput();
     
-    __esos_lcd44780_hw_setDataPins( u8_data );
+    __esos_lcd44780_hw_setDataPins( 0x0F & (u8_data >> 4) );
 
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
 	__ESOS_LCD44780_HW_SET_E_LOW();
+	
+	__esos_lcd44780_hw_setDataPins( 0xF0 & (u8_data << 4) );
+	
+	__ESOS_LCD44780_HW_SET_E_HIGH();
+	ESOS_TASK_YIELD();
+	__ESOS_LCD44780_HW_SET_E_LOW();
+
 	ESOS_TASK_YIELD();
 
 	ESOS_TASK_END();
