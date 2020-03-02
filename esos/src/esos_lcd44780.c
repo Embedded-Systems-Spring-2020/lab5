@@ -260,7 +260,8 @@ void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_
 	int x;
 	for (x = 0; x < u8_bufflen; x++)
 	{
-
+		//The characters write to the buffer and must move to the next column to properly write the characters
+		//pu8_data= is the pointer to the "string" of characters or single character
 		esos_lcd44780_writeChar(u8_row, u8_column + x, pu8_data[x]);
 
 	}
@@ -276,10 +277,12 @@ void esos_lcd44780_getBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_da
 
 void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_data ) {
     // Write zero-terminated string psz_data to location starting at (u8_row,u8_column)
-	// TODO:  Write hardware-independent code here
+
 	int i;
-	
+	// Write a character as long as the string does not end with a null character
 	for (i = 0; psz_data[i] != '\0'; i++) {
+	
+		//The characters write to the buffer and must move to the next column to properly write the characters
 		esos_lcd44780_writeChar(u8_row, u8_column + i, psz_data[i]);
 	}	
 }
@@ -287,16 +290,12 @@ void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_dat
 void esos_lcd44780_setCursorDisplay( BOOL u8_state )
 {
     // Set cursor display state to u8_state
-	// TODO:  Write hardware-independent code here
-
 	esos_lcd44780_vars.b_cursorShown = u8_state;
 }
 
 BOOL esos_lcd44780_getCursorDisplay( void )
 {
     // Return cursor display state
-	// TODO:  Write hardware-independent code here
-
 	return esos_lcd44780_vars.b_cursorShown;
 }
 
