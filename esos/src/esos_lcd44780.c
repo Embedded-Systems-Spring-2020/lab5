@@ -344,7 +344,6 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 	for (i = 0; i < 8; i++) {
 		esos_lcd44780_vars.ast_customChar[u8_charSlot].au8_data[i] = pu8_charData[i];
 	}
-	printf("Registered a char!\n");
 }
 
 void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
@@ -408,12 +407,14 @@ ESOS_CHILD_TASK(__esos_lcd44780_read_u8, uint8_t *pu8_data, BOOL b_isData, BOOL 
 
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
-	*pu8_data = 0x0F & (((uint8_t)__esos_lcd44780_hw_getDataPins()) << 4);
+
+	*pu8_data = 0xF0 & __esos_lcd44780_hw_getDataPins();
+
 	__ESOS_LCD44780_HW_SET_E_HIGH();
 	ESOS_TASK_YIELD();
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	
-	// *pu8_data = pu8_data | (0x0F & (((uint8_t)__esos_lcd44780_hw_getDataPins()) >> 4));
+	*pu8_data = *pu8_data | ((__esos_lcd44780_hw_getDataPins() >> 4) & 0x0F);
 
 	__ESOS_LCD44780_HW_SET_E_LOW();
 	ESOS_TASK_YIELD();

@@ -123,7 +123,6 @@ ESOS_USER_TASK(loop) {
 }
 
 void user_init(void){
-	esos_uiF14_flashLED3(500);
     config_esos_uiF14();
 	//esos_RegisterTask(initLCDtest);
     esos_RegisterTask(loop);
@@ -131,6 +130,7 @@ void user_init(void){
 	esos_lcd44780_configDisplay();
 	esos_lcd44780_clearScreen();
 	_init_custom_chars();
+	esos_uiF14_flashLED3(500);
 }
 
 void _init_custom_chars() {  //these are the custom characters needed to create thermometer
