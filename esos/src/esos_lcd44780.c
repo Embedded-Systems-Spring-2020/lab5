@@ -231,29 +231,32 @@ void esos_lcd44780_setCursorHome( void )
 void esos_lcd44780_setCursor( uint8_t u8_row, uint8_t u8_column )
 {
     // Move cursor to (u8_row,u8_column) without changing memory buffer or the display
-	// TODO:  Write hardware-independent code here
 	esos_lcd44780_vars.u8_cursorRow = u8_row;
 	esos_lcd44780_vars.u8_cursorCol = u8_column;
+	
+   // Informs buffer about the cursor's position
 	esos_lcd44780_vars.b_cursorPositionNeedsUpdate = TRUE;
 
 }
 
 void esos_lcd44780_writeChar( uint8_t u8_row, uint8_t u8_column, uint8_t u8_data )
 {
+	// Writes a character to a row and column that is specified 
 	esos_lcd44780_vars.aac_lcdBuffer[u8_row][u8_column] = u8_data;
+	
+	// Updates buffer that a character has been added
 	esos_lcd44780_vars.ab_lcdBufferNeedsUpdate[u8_row][u8_column] = TRUE;
-	//printf("writeChar\n");
 }
 uint8_t esos_lcd44780_getChar( uint8_t u8_row, uint8_t u8_column )
 
 {
+	//Returns the character that is in that specified position
 	return esos_lcd44780_vars.aac_lcdBuffer[u8_row][u8_column];
 }
 
 void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_data, uint8_t u8_bufflen )
 {
     // Write u8_bufflen characters from pu8_data to (u8_row,u8_column)
-	// TODO:  Write hardware-independent code here
 	int x;
 	for (x = 0; x < u8_bufflen; x++)
 	{
