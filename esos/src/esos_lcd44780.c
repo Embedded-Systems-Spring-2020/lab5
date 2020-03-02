@@ -37,7 +37,9 @@
 #include <esos.h>
 #include <stdlib.h>
 #include <pic24_ports_config.h>
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 // Main data structure for updating lcd44780
 struct {
 	BOOL b_cursorPositionNeedsUpdate;
@@ -69,8 +71,8 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 	ESOS_TASK_BEGIN();
 
 	__ESOS_LCD44780_PIC24_SET_E_LOW;
-	__ESOS_LCD44780_HW_CLEAR_D0()
-	__ESOS_LCD44780_HW_CLEAR_D3()
+	__ESOS_LCD44780_HW_CLEAR_D0();
+	__ESOS_LCD44780_HW_CLEAR_D3();
 	ESOS_TASK_WAIT_TICKS(100);			// Wait >15 msec after power is applied
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(0x30);
 	ESOS_TASK_WAIT_TICKS(10);			// must wait 5ms, busy flag not available
