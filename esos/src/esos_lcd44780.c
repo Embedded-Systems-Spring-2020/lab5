@@ -140,6 +140,8 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 				esos_lcd44780_vars.b_cursorPositionNeedsUpdate = TRUE;
 				ESOS_TASK_WAIT_LCD44780_SET_CG_ADDRESS(8 * i);
 
+				printf("Registering custom char");
+
 				do {
 					static int n;
 
@@ -326,7 +328,8 @@ void esos_lcd44780_setCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
 	for (i = 0; i < 8; i++) {
 		esos_lcd44780_vars.ast_customChar[u8_charSlot].au8_data[i] = pu8_charData[i];
 	}
-	printf("Registered a char!\n");
+	esos_lcd44780_vars.ab_customCharNeedsUpdate[u8_charSlot] = TRUE;
+	// printf("Registered a char!\n");
 }
 
 void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData )
